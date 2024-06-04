@@ -13,6 +13,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                inter: ['inter', 'sans-serif'],
+                rubik: ['rubik', 'sans-serif'],
             },
         },
     },
