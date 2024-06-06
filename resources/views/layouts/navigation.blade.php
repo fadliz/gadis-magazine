@@ -25,7 +25,7 @@
                                     stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                         </span>
-                        <input type="text" placeholder="Search Something..."
+                        <input type="text" placeholder="Search..."
                             class="block w-full pl-10 pr-44 py-1 border border-gray-300 rounded-full shadow-sm placeholder-gray-300 focus:outline-none focus:ring focus:border-blue-300 sm:text-sm" />
                     </div>
                 </div>
