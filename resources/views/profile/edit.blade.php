@@ -1,35 +1,41 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot> --}}
-
     <div class="flex items-center justify-center">
         <!-- Main Content -->
-        <div class="w-3/4 p-4 mx-auto">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="flex items-center w-full p-6">
+        <div class="w-full p-4 mx-auto mr-[120px] ml-[120px] mt-[23px]">
+            <div class="mx-auto sm:px-6 lg:px-8 space-y-12 pb-32">
+                <div class="flex py-6 mt-[40px] justify-between">
                     <button
-                        class="bg-[#FFEAEA] text-pink-500 flex items-center border border-pink-500 rounded-full px-5 py-3 hover:bg-pink-100">
-                        <svg class="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 10">
+                        class="ml-2 bg-[#FFEAEA] text-pink-500 flex items-center border border-[#FD507E] rounded-full px-5 py-3 hover:bg-pink-100">
+                        <svg class="w-6 h-6 mr-2 text-[#FD507E]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 14 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                                 d="M10 5H1m0 0 4 4M1 5l4-4" />
                         </svg>
-                        <span>Back</span>
+                        <span class="text-[#FD507E] text-lg font-rubik">Back</span>
                     </button>
                     <h1
-                        class="tracking-wide subpixel-antialiased text-3xl font-extrabold font-rubik text-[#332C2B] text-center mx-auto">
+                        class="tracking-wide subpixel-antialiased text-5xl font-extrabold font-rubik text-[color:#332C2B] text-center content-center">
                         Edit Profile</h1>
+                    {{-- placeholder button to evenly distribute items --}}
+                    <button
+                        class="invisible ml-2 bg-[#FFEAEA] text-pink-500 flex items-center border border-[#FD507E] rounded-full px-5 py-3 hover:bg-pink-100">
+                        <svg class="w-6 h-6 mr-2 text-[#FD507E]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                d="M10 5H1m0 0 4 4M1 5l4-4" />
+                        </svg>
+                        <span class="text-[#FD507E] text-lg font-rubik">Back</span>
+                    </button>
+                    {{--  --}}
                 </div>
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg flex">
-                    <div class="w-1/4 flex flex-col items-center">
-                        <label class="text-center mb-4 font-bold font-inter text-black">Photo Profile</label>
+                <div class="p-4 sm:p-8 border border-[#B4B4B4] bg-white shadow sm:rounded-lg flex mx-2 h-[586px]">
+                    <div class="w-1/5 ml-2 flex flex-col items-center self-center mb-8">
+                        <label class="text-center mb-4 text-lg font-semibold font-inter text-black">Photo
+                            Profile</label>
                         <img src={{ asset('img/fem-profile-placeholder.png') }} alt="Profile Image"
-                            class="w-36 h-36 border rounded-full mb-4">
+                            class="w-2/3 h-2/3 ml-2 mb-4">
                         <button
-                            class="mt-4 py-2 px-4 border border-[#6A6A6A] rounded text-[#6A6A6A] flex items-center hover:bg-pink-100">
+                            class="mt-5 py-1 px-4 font-medium text-lg border border-[#6A6A6A] rounded text-[#6A6A6A] flex items-center hover:bg-pink-100">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" class="mr-2 flex items-center">
                                 <path
@@ -43,10 +49,8 @@
                             </svg>
                             Choose File</button>
                     </div>
-                    <div class="w-3/4 ml-8">
-                        <div class="grid grid-cols-2 gap-4">
-                            @include('profile.partials.update-profile-information-form')
-                        </div>
+                    <div class="w-3/4 ml-8 content-center">
+                        @include('profile.partials.update-profile-password-form')
                     </div>
                 </div>
             </div>

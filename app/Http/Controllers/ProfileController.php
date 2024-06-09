@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
@@ -56,5 +58,20 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function process(Request $request): RedirectResponse {
+        Log::info($request);
+        $profileRequest = $request->only('name','email');
+        $profileUpdateRequest = new ProfileUpdateRequest();
+        $profileUpdateRequest->merge($profileRequest);
+        Log::info($profileUpdateRequest);
+        if (!$request->password) {
+            $passwordController = new PasswordController();
+            $passwordController->update($request->password);
+        }
+        // $this->update($profileUpdateRequest);
+        
+        return Redirect::to('/profile');
     }
 }
