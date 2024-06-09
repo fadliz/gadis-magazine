@@ -29,6 +29,7 @@
                 @endforeach
             </div>
             <!-- Display pagination links -->
+            <div class="my-10"></div>
             {{ $articles->links() }}
         </div>
     </div>

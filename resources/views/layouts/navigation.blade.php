@@ -45,7 +45,7 @@
 
                                     <div class="ms-1"></div>
                                     <div class="sm:ml-2"></div>
-                                    <img src="{{ asset('img/fem-profile-placeholder.png') }}" alt="Profile Picture"
+                                    <img src="{{ Auth::user()->picture ? asset(Auth::user()->picture) : asset('img/fem-profile-placeholder.png') }}" alt="Profile Picture"
                                         class="h-12 w-12 rounded-full mr-[130px]">
                                 </button>
                             </x-slot>
@@ -182,13 +182,18 @@
     <script>
         function confirmLogout() {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You will be logged out.",
-                icon: 'warning',
+                title: 'Log Out',
+                text: 'Are you sure you want to logout from your account?',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, log out!'
+                confirmButtonColor: '#FF1818',
+                cancelButtonColor: '#E2E2E2',
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'flex bg-[#FF1818] text-white font-extrabold py-[16px] px-[130px] mr-[10px] rounded-full my-2 order-2',
+                    cancelButton: 'flex bg-[#E2E2E2] text-[color:#332C2B] font-extrabold py-[16px] px-[130px] mr-[10px] rounded-full order-1'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('logout-form').submit();

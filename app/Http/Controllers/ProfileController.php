@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Auth\PasswordController;
+use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Controllers\Auth\PasswordController;
+use Illuminate\Validation\Rules;
 
 class ProfileController extends Controller
 {
@@ -27,17 +29,31 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+{
+    Log::info('Current user:', ['user' => $request->user()]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    if (!$request->user()) {
+        Log::info('No authenticated user found, attempting to resolve user by email.');
+        $request->setUserResolver(function () use ($request) {
+            $user = \App\Models\User::where('email', $request->input('email'))->first();
+            Log::info('Resolved user:', ['user' => $user]);
+            return $user;
+        });
     }
+
+    $user = $request->user();
+    Log::info('User after resolver:', ['user' => $user]);
+
+    $user->fill($request->only(['username', 'name', 'email', 'picture']));
+
+    if ($user->isDirty('email')) {
+        $user->email_verified_at = null;
+    }
+
+    $user->save();
+
+    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+}
 
     /**
      * Delete the user's account.
@@ -62,15 +78,29 @@ class ProfileController extends Controller
 
     public function process(Request $request): RedirectResponse {
         Log::info($request);
-        $profileRequest = $request->only('name','email');
+        $request->validate([
+            'name' => ['sometimes', 'string', 'max:255'],
+            'password' => ['sometimes', Rules\Password::defaults()],
+            'picture' => ['sometimes','file','mimes:jps,png,gif', 'max:3072'],
+        ]);
+
+        $path = null;
+        if ($request->hasFile('picture')) {
+            $path = 'storage/' . $request->file('picture')->storePublicly('images', 'public');
+        }
+        Log::info($path);
+        $profileRequest = $request->only('username','name','email');
+        if ($path !== null) {
+            $profileRequest['picture'] = $path;
+        }
         $profileUpdateRequest = new ProfileUpdateRequest();
         $profileUpdateRequest->merge($profileRequest);
         Log::info($profileUpdateRequest);
-        if (!$request->password) {
+        if ($request->password) {
             $passwordController = new PasswordController();
             $passwordController->update($request->password);
         }
-        // $this->update($profileUpdateRequest);
+        $this->update($profileUpdateRequest);
         
         return Redirect::to('/profile');
     }

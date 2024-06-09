@@ -1,14 +1,36 @@
-<section class="flex">
-    <form method="post" action="{{ route('profile.process') }}" class="w-full mb-[16px]">
+<section class="flex" x-data="picturePreview()">
+    <form method="post" action="{{ route('profile.process') }}" enctype="multipart/form-data" class="w-full mb-[16px]">
         @csrf
         @method('post')
         <div class="flex flex-col lg:flex-row items-center mt-12 gap-16 w-full px-5">
+            <div class="w-1/5 ml-2 flex flex-col items-center self-center mt-6">
+                <label class="text-center mb-6 text-lg font-semibold font-inter text-black">Photo
+                    Profile</label>
+                <img id="preview" src="{{ $user->picture ? asset($user->picture) : asset('img/fem-profile-placeholder.png') }}" alt="Profile Image"
+                    class="border w-full h-full ml-2 mb-4">
+                <button @click="document.getElementById('picture').click()"
+                    class="mt-5 py-1 px-4 font-medium text-lg border border-[#6A6A6A] rounded text-[#6A6A6A] flex items-center hover:bg-pink-100"
+                    type="button">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" class="mr-2 flex items-center">
+                        <path
+                            d="M7.38948 8.984H6.45648C4.42148 8.984 2.77148 10.634 2.77148 12.669V17.544C2.77148 19.578 4.42148 21.228 6.45648 21.228H17.5865C19.6215 21.228 21.2715 19.578 21.2715 17.544V12.659C21.2715 10.63 19.6265 8.984 17.5975 8.984L16.6545 8.984"
+                            stroke="#6A6A6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12.0215 2.19051V14.2315" stroke="#6A6A6A" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M9.10645 5.1188L12.0214 2.1908L14.9374 5.1188" stroke="#6A6A6A" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <input @change="showPreview(event)" type="file" name="picture" id="picture"
+                        class="absolute inset-0 -z-10 opacity-0">
+                    Choose File</button>
+            </div>
             {{-- Profile Information --}}
             <div class="flex flex-col space-y-6 w-1/2">
                 <div class="flex flex-col">
                     <x-input-label for="username" :value="__('Username')"
                         class="font-inter text-[length:18px] text-[color:#6A6A6A] font-semibold mb-1" />
-                    <x-text-input disabled id="username" name="username" type="text"
+                    <x-text-input readonly id="username" name="username" type="text"
                         class="text-[length:18px] disabled:bg-slate-50 disabled:cursor-not-allowed flex lg:h-[52px] sm:h-full border-[color:#6A6A6A]"
                         :value="old('username', $user->username)" required autofocus autocomplete="username" />
                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
@@ -17,7 +39,7 @@
                 <div class="flex flex-col">
                     <x-input-label for="email" :value="__('Email')"
                         class="font-inter text-[length:18px] text-[color:#6A6A6A] font-semibold mb-1" />
-                    <x-text-input disabled id="email" name="email" type="email"
+                    <x-text-input readonly id="email" name="email" type="email"
                         class="text-[length:18px] disabled:bg-slate-50 disabled:cursor-not-allowed flex lg:h-[52px] sm:h-full border-[color:#6A6A6A]"
                         :value="old('email', $user->email)" required autocomplete="username" />
                     <x-input-error class="mt-2" :messages="$errors->get('email')" />
@@ -103,6 +125,17 @@
 </section>
 
 <script>
+    function picturePreview() {
+        return {
+            showPreview: (event) => {
+                if (event.target.files.length > 0) {
+                    var src = URL.createObjectURL(event.target.files[0]);
+                    document.getElementById("preview").src = src;
+                }
+            }
+        }
+    }
+
     document.getElementById('update_password_password').addEventListener('input', function() {
         document.getElementById('update_password_password_confirmation').value = this.value;
     });

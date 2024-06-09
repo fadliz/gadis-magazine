@@ -6,8 +6,9 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller as BaseController;
 
-class CommentController extends Controller
+class CommentController extends BaseController
 {
     public function __construct()
     {
