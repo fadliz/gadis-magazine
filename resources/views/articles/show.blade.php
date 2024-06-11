@@ -112,7 +112,7 @@
                 const commentContainer = document.getElementById('commentContainer');
                 data.comments.forEach(comment => {
                     const div = document.createElement('div');
-                    const imgSrc = comment.user.picture ? 'http://127.0.0.1:8000/' + comment.user.picture :
+                    const imgSrc = comment.user.picture ? 'http://127.0.0.1:8000/storage/' + comment.user.picture :
                         'https://via.placeholder.com/40';
                     const createdAtFormatted = moment(comment.created_at)
                         .fromNow(); // Format createdAt to a human-readable format
