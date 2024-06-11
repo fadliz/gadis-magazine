@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\Article;
-use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
-class CommentController extends BaseController
+class CommentControllerAPI extends BaseController
 {
     public function __construct()
     {
@@ -21,11 +22,11 @@ class CommentController extends BaseController
             'content' => 'required'
         ]);
 
-        $article->comments()->create([
+        $comment = $article->comments()->create([
             'content' => $validatedData['content'],
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('articles.show', $article);
+        return response()->json(['comment' => $comment], 200);
     }
 }

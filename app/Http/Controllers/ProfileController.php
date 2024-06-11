@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Controllers\Auth\PasswordController;
-use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -29,31 +29,31 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-{
-    Log::info('Current user:', ['user' => $request->user()]);
+    {
+        Log::info('Current user:', ['user' => $request->user()]);
 
-    if (!$request->user()) {
-        Log::info('No authenticated user found, attempting to resolve user by email.');
-        $request->setUserResolver(function () use ($request) {
-            $user = \App\Models\User::where('email', $request->input('email'))->first();
-            Log::info('Resolved user:', ['user' => $user]);
-            return $user;
-        });
+        if (!$request->user()) {
+            Log::info('No authenticated user found, attempting to resolve user by email.');
+            $request->setUserResolver(function () use ($request) {
+                $user = \App\Models\User::where('email', $request->input('email'))->first();
+                Log::info('Resolved user:', ['user' => $user]);
+                return $user;
+            });
+        }
+
+        $user = $request->user();
+        Log::info('User after resolver:', ['user' => $user]);
+
+        $user->fill($request->only(['username', 'name', 'email', 'picture']));
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
-
-    $user = $request->user();
-    Log::info('User after resolver:', ['user' => $user]);
-
-    $user->fill($request->only(['username', 'name', 'email', 'picture']));
-
-    if ($user->isDirty('email')) {
-        $user->email_verified_at = null;
-    }
-
-    $user->save();
-
-    return Redirect::route('profile.edit')->with('status', 'profile-updated');
-}
 
     /**
      * Delete the user's account.
@@ -76,12 +76,13 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function process(Request $request): RedirectResponse {
+    public function process(Request $request): RedirectResponse
+    {
         Log::info($request);
         $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'password' => ['sometimes', Rules\Password::defaults()],
-            'picture' => ['sometimes','file','mimes:jps,png,gif', 'max:3072'],
+            'picture' => ['sometimes', 'file', 'mimes:jps,png,gif', 'max:3072'],
         ]);
 
         $path = null;
@@ -89,7 +90,7 @@ class ProfileController extends Controller
             $path = $request->file('picture')->storePublicly('images', 'public');
         }
         Log::info($path);
-        $profileRequest = $request->only('username','name','email');
+        $profileRequest = $request->only('username', 'name', 'email');
         if ($path !== null) {
             $profileRequest['picture'] = $path;
         }
@@ -101,7 +102,7 @@ class ProfileController extends Controller
             $passwordController->update($request->password);
         }
         $this->update($profileUpdateRequest);
-        
+
         return Redirect::to('/profile');
     }
 }
