@@ -6,7 +6,7 @@
             <div class="w-1/5 ml-2 flex flex-col items-center self-center mt-6">
                 <label class="text-center mb-6 text-lg font-semibold font-inter text-black">Photo
                     Profile</label>
-                <img id="preview" src="{{ $user->picture ? asset($user->picture) : asset('img/fem-profile-placeholder.png') }}" alt="Profile Image"
+                <img id="preview" src="{{ $user->picture ? Storage::url($user->picture) : asset('img/fem-profile-placeholder.png') }}" alt="Profile Image"
                     class="border w-full h-full ml-2 mb-4">
                 <button @click="document.getElementById('picture').click()"
                     class="mt-5 py-1 px-4 font-medium text-lg border border-[#6A6A6A] rounded text-[#6A6A6A] flex items-center hover:bg-pink-100"

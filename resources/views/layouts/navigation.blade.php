@@ -45,7 +45,7 @@
 
                                     <div class="ms-1"></div>
                                     <div class="sm:ml-2"></div>
-                                    <img src="{{ Auth::user()->picture ? asset(Auth::user()->picture) : asset('img/fem-profile-placeholder.png') }}" alt="Profile Picture"
+                                    <img src="{{ Auth::user()->picture ? Storage::url(Auth::user()->picture) : asset('img/fem-profile-placeholder.png') }}" alt="Profile Picture"
                                         class="h-12 w-12 rounded-full mr-[130px]">
                                 </button>
                             </x-slot>

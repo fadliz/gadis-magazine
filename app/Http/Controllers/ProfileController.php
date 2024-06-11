@@ -86,7 +86,7 @@ class ProfileController extends Controller
 
         $path = null;
         if ($request->hasFile('picture')) {
-            $path = 'storage/' . $request->file('picture')->storePublicly('images', 'public');
+            $path = $request->file('picture')->storePublicly('images', 'public');
         }
         Log::info($path);
         $profileRequest = $request->only('username','name','email');

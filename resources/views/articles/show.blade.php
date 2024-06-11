@@ -47,7 +47,7 @@
                         <div class="space-y-4 mt-12" id="commentContainer">
                             @foreach ($article->comments->take(4) as $comment)
                                 <div class="flex items-start space-x-4">
-                                    <img src="{{ $comment->user->picture ? asset($comment->user->picture) : 'https://via.placeholder.com/40' }}"
+                                    <img src="{{ $comment->user->picture ? Storage::url($comment->user->picture) : 'https://via.placeholder.com/40' }}"
                                         alt="User avatar" class="w-10 h-10 rounded-full">
                                     <div class="flex-1">
                                         <div class="bg-gray-100 p-4 rounded-lg">
