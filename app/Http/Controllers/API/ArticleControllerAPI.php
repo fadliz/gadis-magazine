@@ -20,7 +20,7 @@ class ArticleControllerAPI extends Controller
 {
     public function index()
     {
-        $articles = Article::paginate(9);
+        $articles = Article::paginate(5);
         return response()->json(['articles' => $articles], 200);
     }
 
@@ -88,5 +88,11 @@ class ArticleControllerAPI extends Controller
         $comments = $article->comments()->with(['user'])->orderByDesc('created_at')->skip(4)->take($limit)->get();
         Log::info(response()->json(['comments' => $comments]));
         return response()->json(['comments' => $comments]);
+    }
+
+    public function fetchLatestArticles()
+    {
+        $latestArticles = Article::latest()->take(3)->get();
+        return response()->json(['articles' => $latestArticles], 200);
     }
 }

@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::get('articles', [ArticleControllerAPI::class, 'index']);
+Route::get('articles/latest', [ArticleControllerAPI::class, 'fetchLatestArticles']);
 Route::get('articles/{article}', [ArticleControllerAPI::class, 'show']);
 Route::get('articles/{article}/comments', [ArticleControllerAPI::class, 'fetchFourComment']);
 Route::get('articles/{article}/comments/rest', [ArticleControllerAPI::class, 'fetchComments']);
