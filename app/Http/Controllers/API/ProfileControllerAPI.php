@@ -77,8 +77,8 @@ class ProfileControllerAPI extends Controller
             'name' => ['sometimes', 'string', 'max:255'],
             'password' => ['sometimes', Rules\Password::defaults()],
             'picture' => ['sometimes', 'file', 'mimes:jps,png,gif', 'max:3072'],
-        ]);
-
+            ]);
+            
         $path = null;
         if ($request->hasFile('picture')) {
             $path = $request->file('picture')->storePublicly('images', 'public');

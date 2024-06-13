@@ -18,15 +18,17 @@ class CommentControllerAPI extends BaseController
     
     public function store(Request $request, Article $article)
     {
+        Log::info($request);
         $validatedData = $request->validate([
-            'content' => 'required'
+            'content' => 'required',
+            'user_id' => 'required',
         ]);
 
         $comment = $article->comments()->create([
             'content' => $validatedData['content'],
-            'user_id' => Auth::id(),
+            'user_id' => $validatedData['user_id'],
         ]);
 
-        return response()->json(['comment' => $comment], 200);
+        return response()->json(['comment' => $comment], 201);
     }
 }
